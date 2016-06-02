@@ -80,6 +80,11 @@
 					top.location = top.location;
 					return;
 				}
+				if(newname=="DefaultGroup")
+				{
+					top.location=top.location;
+					return;
+				}
 				var ajax_editgroupname;
 				if (window.XMLHttpRequest)
  				{// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -106,6 +111,28 @@
 			}
 		}
 	}
+	function addGroup()
+	{
+		var ajax_addgroup;
+		if(window.XMLHttpRequest)
+		{
+			ajax_addgroup=new XMLHttpRequest;
+		}
+		else
+		{
+			ajax_addgroup=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		ajax_addgroup.onreadystatechange=function()
+		{
+			if(ajax_addgroup.readyState==4 && ajax_addgroup.status==200)
+			{
+				console.log(ajax_addgroup.responseText);
+				top.location=top.location;
+			}
+		}
+		ajax_addgroup.open("GET","addGroup.php",false);
+		ajax_addgroup.send();
+	}
 	function showFriInfo(fid)
 	{
 		console.log(fid);
@@ -122,18 +149,45 @@
 					{
 						document.getElementById("friinfo_table_desp").innerHTML=grouplist[i].list[j].desp;
 					}
-					if(grouplist[i].list[j].group==null)
+					var select_group = document.getElementById("friinfo_table_group").children[0];
+					select_group.innerHTML="";
+					for(k=0;k<grouplist.length;k++)
 					{
-						document.getElementById("friinfo_table_group").innerHTML="DefaultGroup";
+						var newoption = document.createElement("option");
+						var gname = document.createTextNode(grouplist[k].name);
+						newoption.appendChild(gname);
+						newoption.value=grouplist[k].name;
+						if(k==i) newoption.selected="selected";
+						select_group.appendChild(newoption);
 					}
-					else
-					{
-						document.getElementById("friinfo_table_group").innerHTML=grouplist[i].list[j].group;
-					}
-					
 				}
 			}
 		}
+	}
+	function moveFriend(gname)
+	{
+		fid= now_fri_id;
+		var ajax_movefriend;
+		if(window.XMLHttpRequest)
+		{
+			ajax_movefriend = new XMLHttpRequest;
+		}
+		else
+		{
+			ajax_movefriend = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		ajax_movefriend.onreadystatechange = function()
+		{
+			if(ajax_movefriend.readyState==4 && ajax_movefriend.status==200)
+			{
+				response = ajax_movefriend.responseText;
+				console.log(response);
+				top.location=top.location;
+			}
+		}
+		ajax_movefriend.open("POST","moveFriend.php", false);
+		ajax_movefriend.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		ajax_movefriend.send("fid="+fid+"&newg='"+gname+"'");
 	}
 	function editUserInfo()
 	{
@@ -280,7 +334,9 @@
 									<td id="friinfo_table_id">　</td>
 									<td id="friinfo_table_name">　</td>
 									<td id="friinfo_table_desp">　</td>
-									<td id="friinfo_table_group">　</td>
+									<td id="friinfo_table_group">
+										<select width="100%" onchange="moveFriend(this.value);"></select>
+									</td>
 									<td id="friinfo_table_op">
 										<button onclick="delFriend()">Delete</button>
 									</td>
@@ -374,9 +430,9 @@
    			}
    		}
    		table+="<tr><td colspan='2'>";
-   		table+="<button>Add group</button>";
+   		table+="<button onclick='addGroup()'>Add group</button>";
    		table+="</td></tr></table";
-   		//console.log(grouplist);
+   		console.log(grouplist);
    		document.getElementById("friendlist").innerHTML = table;
    	}
  	}

@@ -26,8 +26,6 @@ mysql_select_db("bshw");
 $id=$_SESSION['id'];
 //$id=4;
 //echo $id."<br/>";
-$groupresult=mysql_query("select * from tgroup where userid=".$id);
-$grouprows=mysql_fetch_assoc($groupresult);
 //echo "<table border='1'width='100%' height='100%'>";
 
 $group = new Group();
@@ -49,6 +47,9 @@ while($friendrow)
 	$friendrow=mysql_fetch_assoc($friendresult);
 }
 $glist[] = $group;
+
+$groupresult=mysql_query("select * from tgroup where userid=".$id.";");
+$grouprows=mysql_fetch_assoc($groupresult);
 while($grouprows)
 {
 	$gn = $grouprows['gname'];

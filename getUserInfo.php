@@ -1,22 +1,18 @@
 <?php
-$_SESSION['config_show_result']=0;
+class UserInfo
+{
+	public $id;
+	public $name;
+	public $desp;
+	public $ip;
+}
 session_start();
+$userinfo = new userinfo();
+$userinfo->id=$_SESSION['id'];
+$userinfo->name= $_SESSION['name'];
+$userinfo->desp=$_SESSION['desp'];
+$userinfo->ip=$_SESSION['ip'];
+
+$json_user_info = json_encode($userinfo);
+echo $json_user_info;
 ?>
-<table>
-	<tr>
-		<td>ID</td>
-		<td id="info_id"><?php echo $_SESSION['id']; ?></td>
-	</tr>
-	<tr>
-		<td>Name</td>
-		<td id="info_name"><?php echo $_SESSION['name']; ?></td>
-	</tr>
-	<tr>
-		<td>Memo</td>
-		<td id="info_desp"><?php echo $_SESSION['desp']; ?></td>
-	</tr>
-	<tr>
-		<td>IP</td>
-		<td id="info_ip"><?php echo$_SESSION['ip']; ?></td>
-	</tr>
-</table>

@@ -3,6 +3,8 @@ class Friend
 {
 	public $id;
 	public $name;
+	public $desp;
+	public $group;
 }
 
 class Group
@@ -29,7 +31,7 @@ $grouprows=mysql_fetch_assoc($groupresult);
 //echo "<table border='1'width='100%' height='100%'>";
 
 $group = new Group();
-$group->name="Default Group";
+$group->name="DefaultGroup";
 $friendresult=mysql_query("select * from friend where userid=".$id." and groupname is NULL;");
 $friendrow=mysql_fetch_assoc($friendresult);
 while($friendrow)
@@ -41,6 +43,8 @@ while($friendrow)
 	$friend = new Friend();
 	$friend->id= $fid;
 	$friend->name=$fn;
+	$friend->desp=$friendinforow['desp'];
+	$friend->group=$group->name;
 	$group->list[]=$friend;
 	$friendrow=mysql_fetch_assoc($friendresult);
 }
@@ -70,6 +74,8 @@ while($grouprows)
 			$friend = new Friend();
 			$friend->id= $fid;
 			$friend->name=$fn;
+			$friend->desp=$friendinforow['desp'];
+			$friend->group=$group->name;
 			$list[]=$friend;
 			$friendrow=mysql_fetch_assoc($friendresult);
 		}
